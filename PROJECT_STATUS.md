@@ -110,7 +110,9 @@ Dynamic routes became query routes (`/exercises/room?id=`, `/exercise/room?id=`,
 `/aar/report?id=`, `/aar/print?id=`, `/scenarios/edit?id=`) via `lib/routes.ts`.
 Verified 2026-10-05: image built and run locally (:8012, `postgres://` URL, PORT=10000) ->
 /health ok, Playwright E2E passed against it; pytest 57, vitest 17, ruff/mypy/eslint/tsc clean.
-Deploy: Blueprint at https://render.com/deploy?repo=https://github.com/yash9723/fogroom
+LIVE: https://fogroom.onrender.com (Render service srv-db1tbarncjis73c99ee0, Oregon, free; Postgres
+fogroom-db expires 2026-11-04). Live E2E passed 2026-10-05. Redeploy: push to main (autoDeploy).
+Blueprint: https://render.com/deploy?repo=https://github.com/yash9723/fogroom
 (or via the Render connector). Free web services sleep when idle; free Postgres expires
 after 30 days.
 
