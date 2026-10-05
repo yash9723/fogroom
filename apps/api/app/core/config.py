@@ -3,7 +3,7 @@
 from functools import cached_property
 from pathlib import Path
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Repo root in a source checkout (apps/api/app/core/config.py); inside the Docker image
@@ -50,6 +50,18 @@ class Settings(BaseSettings):
     # Use NullPool (no connection reuse) - required when the same engine is used
     # from several event loops, e.g. in tests with Starlette's TestClient.
     db_null_pool: bool = False
+
+    # Directory of the static-exported Next.js frontend; served at "/" when set (Render image).
+    web_static_dir: str | None = None
+
+    @field_validator("database_url", "test_database_url")
+    @classmethod
+    def _asyncpg_driver(cls, v: str) -> str:
+        # Managed Postgres (Render, Heroku...) hands out postgres:// URLs; we need the asyncpg driver.
+        for prefix in ("postgres://", "postgresql://"):
+            if v.startswith(prefix):
+                return "postgresql+asyncpg://" + v[len(prefix) :]
+        return v
 
     @model_validator(mode="after")
     def _check_production_secrets(self) -> "Settings":

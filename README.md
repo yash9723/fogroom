@@ -2,6 +2,8 @@
 
 **Decision Training Under Information Uncertainty** - Smart India Hackathon problem statement **SIH26248**.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/yash9723/fogroom) (see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#render-one-click))
+
 FOGROOM is a multiplayer, web-based decision-training simulation. An instructor runs a live
 exercise for a team of trainees while deliberately degrading communications - delaying,
 dropping, rerouting and contradicting information per recipient. Afterwards the After Action

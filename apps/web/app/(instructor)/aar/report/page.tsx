@@ -17,7 +17,9 @@ import {
   Waypoints,
 } from "lucide-react";
 import Link from "next/link";
-import { use, useState } from "react";
+import { useState } from "react";
+import { WithQueryId } from "@/components/layout/with-query-id";
+import { routes } from "@/lib/routes";
 import { AarTimeline } from "@/components/aar/aar-timeline";
 import { CommsAnalysis } from "@/components/aar/comms-analysis";
 import { DecisionInspector } from "@/components/aar/decision-inspector";
@@ -190,8 +192,11 @@ function DecisionAnalysis({ report, onInspect }: { report: AarReport; onInspect:
   );
 }
 
-export default function AarPage({ params }: { params: Promise<{ roomId: string }> }) {
-  const { roomId } = use(params);
+export default function AarPage() {
+  return <WithQueryId render={(id) => <AarReportView key={id} roomId={id} />} />;
+}
+
+function AarReportView({ roomId }: { roomId: string }) {
   const room = useRoom(roomId);
   const aar = useAar(roomId);
   const generate = useGenerateAar(roomId);
@@ -222,7 +227,7 @@ export default function AarPage({ params }: { params: Promise<{ roomId: string }
               {env && (
                 <>
                   <Button variant="secondary" asChild>
-                    <Link href={`/aar/${roomId}/print`}>
+                    <Link href={routes.aarPrint(roomId)}>
                       <Printer aria-hidden /> Print view
                     </Link>
                   </Button>
@@ -241,7 +246,7 @@ export default function AarPage({ params }: { params: Promise<{ roomId: string }
 
       {!completed ? (
         <Card>
-          <EmptyState title="Exercise still running" description="The AAR becomes available once the exercise has ended." action={<Button asChild><Link href={`/exercises/${roomId}`}>Open live console</Link></Button>} />
+          <EmptyState title="Exercise still running" description="The AAR becomes available once the exercise has ended." action={<Button asChild><Link href={routes.exercise(roomId)}>Open live console</Link></Button>} />
         </Card>
       ) : !report ? (
         <Card>

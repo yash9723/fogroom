@@ -2,7 +2,8 @@
 
 import { ClipboardList } from "lucide-react";
 import Link from "next/link";
-import { use } from "react";
+import { WithQueryId } from "@/components/layout/with-query-id";
+import { routes } from "@/lib/routes";
 import { Lobby } from "@/components/instructor/lobby";
 import { LiveConsole } from "@/components/instructor/live-console";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,11 @@ import { EmptyState, ErrorState, LoadingBlock } from "@/components/ui/feedback";
 import { qk, useRoom } from "@/features/rooms";
 import { useRoomSocket } from "@/hooks/use-room-socket";
 
-export default function ExerciseRoomPage({ params }: { params: Promise<{ roomId: string }> }) {
-  const { roomId } = use(params);
+export default function ExerciseRoomPage() {
+  return <WithQueryId render={(id) => <ExerciseRoom key={id} roomId={id} />} />;
+}
+
+function ExerciseRoom({ roomId }: { roomId: string }) {
   const room = useRoom(roomId);
   useRoomSocket(roomId, { invalidate: [qk.room(roomId), qk.instructor(roomId)] });
 
@@ -30,7 +34,7 @@ export default function ExerciseRoomPage({ params }: { params: Promise<{ roomId:
         description="History is now immutable. Generate and open the After Action Review."
         action={
           <Button asChild variant="primary">
-            <Link href={`/aar/${roomId}`}>Open After Action Review</Link>
+            <Link href={routes.aar(roomId)}>Open After Action Review</Link>
           </Button>
         }
       />

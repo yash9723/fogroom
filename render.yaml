@@ -1,0 +1,46 @@
+# Render Blueprint: one Docker web service (API + WebSockets + static frontend, same origin),
+# Render Postgres and Render Key Value (Redis-compatible). All on free plans for the demo.
+databases:
+  - name: fogroom-db
+    plan: free
+    databaseName: fogroom
+    user: fogroom
+
+services:
+  - type: keyvalue
+    name: fogroom-redis
+    plan: free
+    ipAllowList: [] # internal network only
+
+  - type: web
+    name: fogroom
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fogroom-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: fogroom-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEMO_PASSWORD # demo personas still sign in via the one-click demo buttons
+        generateValue: true
+      - key: APP_ENV
+        value: staging # demo mode is refused when APP_ENV=production
+      - key: DEMO_MODE
+        value: "true"
+      - key: RUN_MIGRATIONS
+        value: "true"
+      - key: RUN_SEED
+        value: "true"
+      - key: LOG_LEVEL
+        value: INFO

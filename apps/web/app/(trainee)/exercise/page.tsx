@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/lib/routes";
 import { PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,7 +23,7 @@ export default function TraineeHome() {
           <JoinForm
             onJoin={async (code) => {
               const res = await join.mutateAsync(code);
-              router.push(`/exercise/${res.room.id}`);
+              router.push(routes.traineeExercise(res.room.id));
             }}
           />
         </CardBody>
@@ -37,7 +38,7 @@ export default function TraineeHome() {
           <ul className="divide-y divide-line">
             {rooms.data.map((r) => (
               <li key={r.id}>
-                <Link href={`/exercise/${r.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-panel-2">
+                <Link href={routes.traineeExercise(r.id)} className="flex items-center justify-between px-4 py-3 hover:bg-panel-2">
                   <div>
                     <div className="text-sm font-medium">{r.name}</div>
                     <div className="text-xs text-muted">

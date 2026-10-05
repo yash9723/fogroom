@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/lib/routes";
 import { ClipboardList, Gauge, PlayCircle, Plus, Rocket, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,7 +41,7 @@ export default function DashboardPage() {
 
   const launchDemo = async () => {
     const room = await launch.mutateAsync(1);
-    router.push(`/exercises/${room.id}`);
+    router.push(routes.exercise(room.id));
   };
 
   return (
@@ -53,7 +54,7 @@ export default function DashboardPage() {
           <>
             {data?.active[0] && (
               <Button asChild variant="secondary">
-                <Link href={`/exercises/${data.active[0].id}`}>
+                <Link href={routes.exercise(data.active[0].id)}>
                   <PlayCircle aria-hidden /> Open Live Exercise
                 </Link>
               </Button>
@@ -92,15 +93,15 @@ export default function DashboardPage() {
           <div className="grid gap-6 xl:grid-cols-3">
             <Card>
               <CardHeader title="Active exercises" icon={<PlayCircle />} />
-              <RoomList rooms={data.active} empty="No exercise is running" hrefFor={(r) => `/exercises/${r.id}`} />
+              <RoomList rooms={data.active} empty="No exercise is running" hrefFor={(r) => routes.exercise(r.id)} />
             </Card>
             <Card>
               <CardHeader title="Scheduled (lobby)" description="Rooms waiting for trainees" icon={<Users />} />
-              <RoomList rooms={data.scheduled} empty="No rooms in lobby" hrefFor={(r) => `/exercises/${r.id}`} />
+              <RoomList rooms={data.scheduled} empty="No rooms in lobby" hrefFor={(r) => routes.exercise(r.id)} />
             </Card>
             <Card>
               <CardHeader title="Completed exercises" icon={<ClipboardList />} />
-              <RoomList rooms={data.completed.slice(0, 6)} empty="No completed exercises yet" hrefFor={(r) => `/aar/${r.id}`} />
+              <RoomList rooms={data.completed.slice(0, 6)} empty="No completed exercises yet" hrefFor={(r) => routes.aar(r.id)} />
             </Card>
           </div>
 
@@ -111,7 +112,7 @@ export default function DashboardPage() {
                 <ul className="divide-y divide-line">
                   {data.recent_reports.map((r) => (
                     <li key={r.room_id}>
-                      <Link href={`/aar/${r.room_id}`} className="block px-4 py-3 hover:bg-panel-2">
+                      <Link href={routes.aar(r.room_id)} className="block px-4 py-3 hover:bg-panel-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium">{r.room_name}</span>
                           <span className="font-mono text-sm tabular text-accent">{r.team_score.toFixed(0)}</span>

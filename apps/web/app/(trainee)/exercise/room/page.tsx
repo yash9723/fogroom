@@ -2,7 +2,8 @@
 
 import type { RoomEvent } from "@fogroom/shared";
 import { CheckCircle2, Hourglass, Inbox, Map as MapIcon, MessagesSquare, Radio, Target, Vote } from "lucide-react";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
+import { WithQueryId } from "@/components/layout/with-query-id";
 import { toast } from "sonner";
 import { OpsMap } from "@/components/map/ops-map";
 import { ChannelRow } from "@/components/status/indicators";
@@ -47,8 +48,11 @@ function notify(e: RoomEvent) {
   }
 }
 
-export default function TraineeExercisePage({ params }: { params: Promise<{ roomId: string }> }) {
-  const { roomId } = use(params);
+export default function TraineeExercisePage() {
+  return <WithQueryId render={(id) => <TraineeExercise key={id} roomId={id} />} />;
+}
+
+function TraineeExercise({ roomId }: { roomId: string }) {
   const setActive = useUiStore((s) => s.setActiveRoomId);
   const q = useTraineeState(roomId);
   const submit = useSubmitDecision(roomId);

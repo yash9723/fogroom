@@ -2,14 +2,17 @@
 
 import { formatSimTime } from "@fogroom/shared";
 import { Printer } from "lucide-react";
-import { use } from "react";
+import { WithQueryId } from "@/components/layout/with-query-id";
 import { Button } from "@/components/ui/button";
 import { EmptyState, LoadingBlock } from "@/components/ui/feedback";
 import { useAar } from "@/features/aar";
 
 /** Print-optimised AAR (browser "Save as PDF" alternative to the server-generated PDF). */
-export default function AarPrintPage({ params }: { params: Promise<{ roomId: string }> }) {
-  const { roomId } = use(params);
+export default function AarPrintPage() {
+  return <WithQueryId render={(id) => <AarPrint key={id} roomId={id} />} />;
+}
+
+function AarPrint({ roomId }: { roomId: string }) {
   const aar = useAar(roomId);
   if (aar.isLoading) return <LoadingBlock rows={6} />;
   const env = aar.data;

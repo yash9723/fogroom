@@ -1,13 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { use } from "react";
+import { WithQueryId } from "@/components/layout/with-query-id";
 import { BLANK_SCENARIO, ScenarioEditor } from "@/components/scenarios/scenario-editor";
 import { ErrorState, LoadingBlock, PageHeader } from "@/components/ui/feedback";
 import { useSaveScenario, useScenario } from "@/features/scenarios";
+import { routes } from "@/lib/routes";
 
-export default function ScenarioEditPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function ScenarioEditPage() {
+  return <WithQueryId render={(id) => <ScenarioEdit key={id} id={id} />} />;
+}
+
+function ScenarioEdit({ id }: { id: string }) {
   const isNew = id === "new";
   const router = useRouter();
   const q = useScenario(isNew ? undefined : id);
@@ -26,7 +30,7 @@ export default function ScenarioEditPage({ params }: { params: Promise<{ id: str
         saving={save.isPending}
         onSave={async (doc) => {
           const saved = await save.mutateAsync(doc);
-          if (isNew && saved.id) router.replace(`/scenarios/${saved.id}`);
+          if (isNew && saved.id) router.replace(routes.scenario(saved.id));
         }}
       />
     </div>

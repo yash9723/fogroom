@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/lib/routes";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -34,7 +35,7 @@ function DemoInner() {
         const pair = await demoLogin(persona);
         if (persona !== "instructor" && code) {
           const joined = await joinRoomByCode(code);
-          router.replace(`/exercise/${joined.room.id}`);
+          router.replace(routes.traineeExercise(joined.room.id));
         } else {
           router.replace(homeFor(pair.user.role));
         }

@@ -2,9 +2,12 @@
 **/.next
 **/.venv
 **/__pycache__
-apps/api
 apps/web/.env.local
 apps/web/playwright-report
 apps/web/test-results
 .git
 .env
+apps/web/out
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache

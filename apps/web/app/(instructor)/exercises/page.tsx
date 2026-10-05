@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/lib/routes";
 import { Plus, Rocket } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -30,7 +31,7 @@ function CreateDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
     if (!chosen) return;
     const room = await create.mutateAsync({ scenario_id: chosen, name: name || undefined, time_scale: scale });
     onOpenChange(false);
-    router.push(`/exercises/${room.id}`);
+    router.push(routes.exercise(room.id));
   };
 
   return (
@@ -96,7 +97,7 @@ function ExercisesInner() {
             <Button
               onClick={async () => {
                 const room = await launch.mutateAsync(1);
-                router.push(`/exercises/${room.id}`);
+                router.push(routes.exercise(room.id));
               }}
               loading={launch.isPending}
             >
@@ -127,7 +128,7 @@ function ExercisesInner() {
                   {list.map((r) => (
                     <Link
                       key={r.id}
-                      href={g.title === "Completed" ? `/aar/${r.id}` : `/exercises/${r.id}`}
+                      href={g.title === "Completed" ? routes.aar(r.id) : routes.exercise(r.id)}
                       className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 hover:bg-panel-2"
                     >
                       <div>

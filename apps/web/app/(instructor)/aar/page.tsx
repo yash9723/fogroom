@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/lib/routes";
 import { ClipboardList } from "lucide-react";
 import Link from "next/link";
 import { RoomStatusBadge } from "@/components/status/indicators";
@@ -27,7 +28,7 @@ export default function AarListPage() {
       ) : (
         <Card className="divide-y divide-line">
           {done.map((r) => (
-            <Link key={r.id} href={`/aar/${r.id}`} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-panel-2">
+            <Link key={r.id} href={routes.aar(r.id)} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-panel-2">
               <div>
                 <div className="text-sm font-medium">{r.name}</div>
                 <div className="text-xs text-muted">

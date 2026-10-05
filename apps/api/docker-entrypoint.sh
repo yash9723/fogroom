@@ -11,4 +11,4 @@ if [ "${RUN_SEED:-false}" = "true" ]; then
   python -m app.seed
 fi
 
-exec python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers
+exec python -m uvicorn app.main:app --host 0.0.0.0 --port "${PORT:-8000}" --proxy-headers

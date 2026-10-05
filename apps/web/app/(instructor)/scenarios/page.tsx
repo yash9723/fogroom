@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/lib/routes";
 import { Copy, Pencil, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,7 @@ export default function ScenariosPage() {
         description="Fictional scenario templates: roles, channels, phases, timed events with controlled variants and decision points."
         actions={
           <Button asChild variant="primary">
-            <Link href="/scenarios/new"><Plus aria-hidden /> New scenario</Link>
+            <Link href={routes.scenario("new")}><Plus aria-hidden /> New scenario</Link>
           </Button>
         }
       />
@@ -47,7 +48,7 @@ export default function ScenariosPage() {
                 <Badge>{s.decision_count} decision points</Badge>
               </div>
               <div className="mt-4 flex gap-2">
-                <Button asChild size="sm" variant="secondary"><Link href={`/scenarios/${s.id}`}><Pencil aria-hidden /> Edit</Link></Button>
+                <Button asChild size="sm" variant="secondary"><Link href={routes.scenario(s.id)}><Pencil aria-hidden /> Edit</Link></Button>
                 <Button size="sm" variant="ghost" onClick={() => dup.mutate(s.id)}><Copy aria-hidden /> Duplicate</Button>
                 <Button
                   size="sm"

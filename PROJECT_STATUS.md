@@ -103,5 +103,16 @@ docker compose up -d postgres redis          # dependencies
 
 ## Next exact tasks
 
-None required. Optional future work: AI scenario drafting, map editor for locations,
+### Render deployment (user: "ditch cloudfare, just deploy to render")
+DONE in code: one Docker web service (`Dockerfile.render`: FastAPI + static-exported Next
+frontend, same origin) + Render Postgres + Render Key Value, described by `render.yaml`.
+Dynamic routes became query routes (`/exercises/room?id=`, `/exercise/room?id=`,
+`/aar/report?id=`, `/aar/print?id=`, `/scenarios/edit?id=`) via `lib/routes.ts`.
+Verified 2026-10-05: image built and run locally (:8012, `postgres://` URL, PORT=10000) ->
+/health ok, Playwright E2E passed against it; pytest 57, vitest 17, ruff/mypy/eslint/tsc clean.
+Deploy: Blueprint at https://render.com/deploy?repo=https://github.com/yash9723/fogroom
+(or via the Render connector). Free web services sleep when idle; free Postgres expires
+after 30 days.
+
+Optional future work: AI scenario drafting, map editor for locations,
 instructor-tunable metric weights in the UI, httpOnly-cookie auth for production.

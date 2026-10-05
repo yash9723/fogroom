@@ -1,0 +1,32 @@
+# Single-service image for Render: FastAPI serves the API, WebSockets and the static-exported
+# Next.js frontend from one origin. Build context: repository root.
+FROM node:22-alpine AS web
+WORKDIR /repo
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
+COPY apps/web/package.json apps/web/package.json
+COPY packages/shared/package.json packages/shared/package.json
+RUN pnpm install --frozen-lockfile=false
+ENV NEXT_OUTPUT=export \
+    NEXT_PUBLIC_API_URL=same-origin \
+    NEXT_PUBLIC_DEMO_MODE=true \
+    NEXT_TELEMETRY_DISABLED=1
+COPY packages/shared packages/shared
+COPY apps/web apps/web
+RUN pnpm --filter @fogroom/web build
+
+FROM python:3.12-slim
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    WEB_STATIC_DIR=/app/web \
+    FORWARDED_ALLOW_IPS=*
+WORKDIR /app
+COPY apps/api/requirements.lock ./
+RUN pip install --upgrade pip && pip install -r requirements.lock
+COPY apps/api/ ./
+COPY --from=web /repo/apps/web/out ./web
+RUN pip install --no-deps . && useradd --create-home fogroom && chown -R fogroom /app
+USER fogroom
+EXPOSE 8000
+CMD ["sh", "./docker-entrypoint.sh"]

@@ -4,10 +4,12 @@ import asyncio
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
 from app.api.v1 import api_router
@@ -110,6 +112,10 @@ def create_app() -> FastAPI:
         except Exception:
             checks["redis"] = "error"
         return {"status": "ok" if all(v == "ok" for v in checks.values()) else "degraded", **checks}
+
+    # Single-service deploy: serve the static-exported frontend; mounted last so API routes win.
+    if settings.web_static_dir and Path(settings.web_static_dir).is_dir():
+        app.mount("/", StaticFiles(directory=settings.web_static_dir, html=True), name="web")
 
     return app
 

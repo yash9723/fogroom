@@ -21,7 +21,7 @@ export function RequireRole({ roles, children }: { roles: string[]; children: Re
   useEffect(() => {
     if (!hydrated) return;
     if (!user) {
-      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+      router.replace(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
     } else if (!roles.includes(user.role)) {
       router.replace(homeFor(user.role));
     }

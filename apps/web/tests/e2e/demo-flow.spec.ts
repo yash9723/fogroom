@@ -26,11 +26,11 @@ const cardTitles = (page: Page) => page.getByTestId("info-card").locator("h3");
 test("instructor runs Grey Signal; trainees see different information; AAR replays it", async ({ browser }) => {
   // Instructor launches the demo exercise.
   const instructor = await persona(browser, "instructor");
-  await instructor.waitForURL("**/dashboard");
+  await instructor.waitForURL(/\/dashboard\/?$/);
   await instructor.getByTestId("launch-demo").click();
-  await instructor.waitForURL(/\/exercises\/[0-9a-f-]+$/);
+  await instructor.waitForURL(/\/exercises\/room\/?\?id=[0-9a-f-]+$/);
   const roomUrl = instructor.url();
-  const roomId = roomUrl.split("/").pop() as string;
+  const roomId = new URL(roomUrl).searchParams.get("id") as string;
   const code = (await instructor.getByTestId("room-code").textContent())?.trim() as string;
   expect(code).toMatch(/^GREY-\d+$/);
 
@@ -41,7 +41,7 @@ test("instructor runs Grey Signal; trainees see different information; AAR repla
     persona(browser, "charlie", code),
   ]);
   for (const page of [alpha, bravo, charlie]) {
-    await page.waitForURL(/\/exercise\/[0-9a-f-]+$/, { timeout: 60_000 });
+    await page.waitForURL(/\/exercise\/room\/?\?id=[0-9a-f-]+$/, { timeout: 60_000 });
     await expect(page.getByText(/Waiting for Operation Grey Signal to start/)).toBeVisible();
   }
   await expect(instructor.getByText("3 joined", { exact: false })).toBeVisible();
@@ -94,7 +94,7 @@ test("instructor runs Grey Signal; trainees see different information; AAR repla
   await expect(instructor.getByText(/History is now immutable/)).toBeVisible();
   await expect(alpha.getByText(/The exercise has ended/)).toBeVisible();
 
-  await instructor.goto(`/aar/${roomId}`);
+  await instructor.goto(`/aar/report?id=${roomId}`);
   await instructor.getByTestId("generate-aar").click();
   await expect(instructor.getByText("Exercise summary")).toBeVisible({ timeout: 30_000 });
 
