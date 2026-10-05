@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fogroom-api",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/dev.ps1", "dev-api"],
+      "port": 8000
+    },
+    {
+      "name": "fogroom-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@fogroom/web", "dev"],
+      "port": 3000
+    }
+  ]
+}

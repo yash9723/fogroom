@@ -1,0 +1,21 @@
+{
+  "name": "fogroom",
+  "private": true,
+  "description": "FOGROOM - Decision Training Under Information Uncertainty (SIH26248)",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @fogroom/web dev",
+    "build:web": "pnpm --filter @fogroom/web build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "e2e": "pnpm --filter @fogroom/web e2e",
+    "format": "prettier --write \"apps/web/**/*.{ts,tsx,css,json}\" \"packages/**/*.{ts,json}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

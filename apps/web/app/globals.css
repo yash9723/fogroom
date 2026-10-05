@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/*
+ * FOGROOM design tokens - dark command-centre palette.
+ * Status colours are always paired with an icon + text label in components
+ * (never colour alone).
+ */
+@theme {
+  --color-bg: #0a0d12;
+  --color-panel: #0f141b;
+  --color-panel-2: #141a23;
+  --color-panel-3: #1a222d;
+  --color-line: #222b37;
+  --color-line-strong: #2e3a4a;
+  --color-fg: #e4eaf1;
+  --color-muted: #8b98a9;
+  --color-subtle: #627083;
+  --color-accent: #4fc1d6;
+  --color-accent-strong: #2ea6bd;
+  --color-accent-soft: #10303a;
+  --color-ok: #3fb87f;
+  --color-ok-soft: #10301f;
+  --color-warn: #e3a63c;
+  --color-warn-soft: #34270f;
+  --color-crit: #e5574e;
+  --color-crit-soft: #3a1615;
+  --color-off: #6f7a89;
+  --color-off-soft: #1f252e;
+  --color-info: #7aa5f5;
+  --color-violet: #a48cf0;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --animate-fr-in: fr-in 260ms ease-out;
+  --animate-fr-pulse: fr-pulse 1.8s ease-in-out infinite;
+
+  @keyframes fr-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fr-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-bg);
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(79, 193, 214, 0.06), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(122, 165, 245, 0.04), transparent 60%),
+    var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgba(79, 193, 214, 0.35);
+}
+
+/* Thin, unobtrusive scrollbars for dense dashboards */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Projector-friendly presentation mode (?presentation=true or settings toggle) */
+html[data-presentation="true"] {
+  font-size: 118%;
+}
+html[data-presentation="true"] .hide-in-presentation {
+  display: none !important;
+}
+html[data-presentation="true"] .presentation-emphasis {
+  font-size: 1.15em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Leaflet - dark fictional map */
+.leaflet-container {
+  background: #0b1520 !important;
+  font-family: var(--font-sans);
+}
+.leaflet-control-attribution {
+  display: none;
+}
+.leaflet-bar a {
+  background: var(--color-panel-2) !important;
+  color: var(--color-fg) !important;
+  border-color: var(--color-line) !important;
+}
+.leaflet-tooltip.fr-tooltip {
+  background: var(--color-panel-2);
+  color: var(--color-fg);
+  border: 1px solid var(--color-line-strong);
+  box-shadow: none;
+  font-size: 12px;
+}
+.leaflet-tooltip.fr-tooltip::before {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
